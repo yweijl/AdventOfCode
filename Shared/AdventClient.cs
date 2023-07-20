@@ -25,7 +25,6 @@ public class AdventClient : IDisposable
             var response = await httpClient.GetAsync(endpoint);
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(responseBody);
             return responseBody;
         }
         catch (HttpRequestException ex)

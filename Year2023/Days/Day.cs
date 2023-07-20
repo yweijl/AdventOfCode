@@ -18,5 +18,6 @@ public abstract class Day
         return AdventClient.GetInputAsync(InputDay);
     }
 
-    public abstract Task<string> ExecuteAsync();
+    public abstract Task<string> ExecuteFirstAsync();
+    public abstract Task<string> ExecuteSecondAsync();
 }
