@@ -5,10 +5,12 @@ namespace Shared;
 
 public class AdventClient : IDisposable
 {
-    private static Uri Uri => new Uri("https://adventofcode.com/2022/day/1/input");
+    private static string Url => "https://adventofcode.com/2022/day/{day}/input";
 
-    public async Task<string?> GetInputAsync()
+    public async Task<string> GetInputAsync(int day)
     {
+        var endpoint = new Uri($"{Url.Replace("{day}", day.ToString())}", UriKind.Absolute);
+
         string? input = null;
 
         using var handler = new HttpClientHandler();
@@ -17,10 +19,10 @@ public class AdventClient : IDisposable
         {
             var cookieContainer = new CookieContainer();
             var cookie = new Cookie("session", GetSessionCookieValue());
-            cookieContainer.Add(Uri, cookie);
+            cookieContainer.Add(endpoint, cookie);
             handler.CookieContainer = cookieContainer;
 
-            var response = await httpClient.GetAsync(Uri);
+            var response = await httpClient.GetAsync(endpoint);
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
             Console.WriteLine(responseBody);
