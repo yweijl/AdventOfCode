@@ -1,6 +1,5 @@
 using Shared;
 
-
 namespace Year2023.Days;
 
 public class Day1 : Day
@@ -11,12 +10,12 @@ public class Day1 : Day
     {
     }
 
-    public override async Task<string> ExecuteFirstAsync()
+    protected override async Task<string> ExecuteFirstAsync()
     {
         return (await GetCaloriesPerBackAsync()).Max().ToString();
     }
 
-    public override async Task<string> ExecuteSecondAsync()
+    protected override async Task<string> ExecuteSecondAsync()
     {
         var backpacks = await GetCaloriesPerBackAsync();
         return backpacks.OrderDescending().Take(3).Sum().ToString();
