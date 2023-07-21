@@ -6,7 +6,7 @@ public class Day1 : Day
 {
     protected override int InputDay => 1;
 
-    public Day1(AdventClient adventClient) : base(adventClient)
+    public Day1(bool executeFirst, bool executeSecond, AdventClient adventClient) : base(executeFirst, executeSecond, adventClient)
     {
     }
 

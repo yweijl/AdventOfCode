@@ -6,7 +6,7 @@ public class Day2 : Day
 {
     protected override int InputDay => 2;
 
-    public Day2(AdventClient client) : base(client)
+    public Day2(bool executeFirst, bool executeSecond, AdventClient client) : base(executeFirst, executeSecond, client)
     {
     }
 
@@ -48,8 +48,8 @@ public class Day2 : Day
 
         public Match(char opponentEncryptedGesture, char myEncryptedGesture)
         {
-            _myGesture = DecryptMeGesture(myEncryptedGesture);
-            _opponentGesture = DecryptOpponentGesture(opponentEncryptedGesture);
+            _myGesture = DecryptGesture(myEncryptedGesture);
+            _opponentGesture = DecryptGesture(opponentEncryptedGesture);
         }
 
         private int CalculateMatchPoint()
@@ -72,22 +72,14 @@ public class Day2 : Day
             };
         }
 
-        private static Gesture DecryptMeGesture(char me) => me switch
+        private static Gesture DecryptGesture(char gesture) => gesture switch
         {
-            'X' => Gesture.Rock,
-            'Y' => Gesture.Paper,
-            'Z' => Gesture.Scissor,
+            'X' or 'A' => Gesture.Rock,
+            'Y' or 'B' => Gesture.Paper,
+            'Z' or 'C' => Gesture.Scissor,
             _ => throw new ArgumentException("Invalid input"),
         };
-
-        private static Gesture DecryptOpponentGesture(char opponent) => opponent switch
-        {
-            'A' => Gesture.Rock,
-            'B' => Gesture.Paper,
-            'C' => Gesture.Scissor,
-            _ => throw new ArgumentException("Invalid input"),
-        };
-
+        
         private enum Gesture
         {
             Rock,
