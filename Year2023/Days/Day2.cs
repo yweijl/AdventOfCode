@@ -18,9 +18,12 @@ public class Day2 : Day
     }
 
 
-    protected override Task<string> ExecuteSecondAsync()
+    protected override async Task<string> ExecuteSecondAsync()
     {
-        throw new NotImplementedException();
+        var matches = (await GetStrategyGuideAsync()).ToList();
+        matches.ForEach(x => x.UpdateMyGesture());
+        var result = matches.Sum(match => match.GetMatchPoints);
+        return result.ToString();
     }
 
     private async Task<IEnumerable<Match>> GetStrategyGuideAsync()
@@ -34,8 +37,10 @@ public class Day2 : Day
 
     private class Match
     {
-        private readonly Gesture _myGesture;
+        private Gesture _myGesture;
         private readonly Gesture _opponentGesture;
+        private readonly OutCome _outCome;
+        
         public int GetMatchPoints => CalculateMatchPoint();
 
         private int GetMyGestureValue => _myGesture switch
@@ -46,12 +51,27 @@ public class Day2 : Day
             _ => throw new ArgumentException("Invalid input"),
         };
 
-        public Match(char opponentEncryptedGesture, char myEncryptedGesture)
+        public Match(char firstValue, char secondValue)
         {
-            _myGesture = DecryptGesture(myEncryptedGesture);
-            _opponentGesture = DecryptGesture(opponentEncryptedGesture);
+            _myGesture = DecryptGesture(secondValue);
+            _opponentGesture = DecryptGesture(firstValue);
+            _outCome = GetOutCome(secondValue);
         }
-
+        
+        public void UpdateMyGesture()
+        {
+            _myGesture = (_outCome, _opponentGesture) switch
+            {
+                (OutCome.Loose, Gesture.Rock )=> Gesture.Scissor,
+                (OutCome.Loose, Gesture.Paper )=> Gesture.Rock,
+                (OutCome.Loose, Gesture.Scissor )=> Gesture.Paper,
+                (OutCome.Win, Gesture.Rock) => Gesture.Paper,
+                (OutCome.Win, Gesture.Paper) => Gesture.Scissor,
+                (OutCome.Win, Gesture.Scissor) => Gesture.Rock,
+                _ => _opponentGesture,
+            };
+        }
+        
         private int CalculateMatchPoint()
         {
             
@@ -72,6 +92,14 @@ public class Day2 : Day
             };
         }
 
+        private static OutCome GetOutCome(char outcome) => outcome switch
+        {
+            'X' => OutCome.Loose,
+            'Y' => OutCome.Draw,
+            'Z' => OutCome.Win,
+            _ => throw new ArgumentException("Invalid input"),
+        };
+
         private static Gesture DecryptGesture(char gesture) => gesture switch
         {
             'X' or 'A' => Gesture.Rock,
@@ -85,6 +113,13 @@ public class Day2 : Day
             Rock,
             Paper,
             Scissor
+        }
+
+        private enum OutCome
+        {
+            Loose,
+            Draw,
+            Win,
         }
     }
 }
