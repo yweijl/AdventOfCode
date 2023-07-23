@@ -21,16 +21,27 @@ public class Day3 : Day
                 var firstCompartment = rucksack[..compartmentDivider];
                 var secondCompartment = rucksack[compartmentDivider..];
                 var matchingItem = firstCompartment.Intersect(secondCompartment).First();
-
-                return char.IsUpper(matchingItem)
-                    ? matchingItem - 38
-                    : matchingItem - 96;
+                return GetPriority(matchingItem);
             });
         return priority.ToString();
     }
-
-    protected override Task<string> ExecuteSecondAsync()
+    
+    protected override async Task<string> ExecuteSecondAsync()
     {
-        throw new NotImplementedException();
+        var rucksackItems = await GetInputAsync();
+        var elfGroups = rucksackItems.Split('\n', StringSplitOptions.RemoveEmptyEntries).Chunk(3);
+        var priority = elfGroups.Sum(group =>
+        {
+            var batchItem = group[0].Intersect(group[1]).Intersect(group[2]).First();
+            return GetPriority(batchItem);
+        });
+        return priority.ToString();
+    }
+
+    private static int GetPriority(char matchingItem)
+    {
+        return char.IsUpper(matchingItem)
+            ? matchingItem - 38
+            : matchingItem - 96;
     }
 }
