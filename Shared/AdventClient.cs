@@ -5,11 +5,9 @@ namespace Shared;
 
 public class AdventClient : IDisposable
 {
-    private static string Url => "https://adventofcode.com/2022/day/{day}/input";
-
     public async Task<string> GetInputAsync(int day)
     {
-        var endpoint = new Uri($"{Url.Replace("{day}", day.ToString())}", UriKind.Absolute);
+        var endpoint = new Uri($"https://adventofcode.com/2022/day/{day}/input", UriKind.Absolute);
 
         string? input = null;
 
