@@ -12,6 +12,9 @@ await day2.ExecuteAsync();
 var day3 = new Day3(false, false, client);
 await day3.ExecuteAsync();
 
-var day4 = new Day4(true, true, client);
+var day4 = new Day4(false, false, client);
 await day4.ExecuteAsync();
+
+var day5 = new Day5(true, false, client);
+await day5.ExecuteAsync();
     
