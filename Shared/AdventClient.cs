@@ -5,7 +5,12 @@ namespace Shared;
 
 public class AdventClient : IDisposable
 {
-    public async Task<string> GetInputAsync(int day)
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
+
+    public static async Task<string> GetInputAsync(int day)
     {
         var endpoint = new Uri($"https://adventofcode.com/2022/day/{day}/input", UriKind.Absolute);
 
@@ -42,10 +47,5 @@ public class AdventClient : IDisposable
 
         // Session Cookie stored in UserSecrets
         return configuration["SessionCookie"]!;
-    }
-
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
     }
 }

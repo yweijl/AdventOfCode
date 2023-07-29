@@ -5,35 +5,49 @@ namespace Year2023.Days;
 
 public class Day5 : Day
 {
-    protected override int InputDay => 5;
-
-    public Day5(bool executeFirst, bool executeSecond, AdventClient adventClient) : base(executeFirst, executeSecond,
+    public Day5(bool executeFirst, bool executeSecond, AdventClient adventClient) : base(
+        executeFirst, executeSecond,
         adventClient)
     {
     }
 
-    protected override async Task<string> ExecuteFirstAsync()
+    protected override int InputDay => 5;
+
+    protected override Task<string> ExecuteFirstAsync()
     {
+        return ExecuteCraneMoverAsync();
+    }
+
+    protected override Task<string> ExecuteSecondAsync()
+    {
+        return ExecuteCraneMoverAsync(true);
+    }
+
+    private async Task<string> ExecuteCraneMoverAsync(bool isCraneMover9001 = false)
+    {
+
         var (stacks, rearrangementProcedure)
             = await GetStartingStacksAndProceduresAsync();
 
-        RearrangeStacks(rearrangementProcedure, stacks);
+        RearrangeStacks(rearrangementProcedure, stacks, isCraneMover9001);
 
         return string.Join("",
             stacks.SelectMany(x => x.First().ToString()));
     }
 
-    private static void RearrangeStacks(IEnumerable<int[]> rearrangementProcedure, List<char>[] stacks)
+    private static void RearrangeStacks(IEnumerable<int[]> rearrangementProcedure,
+        IReadOnlyList<List<char>> stacks, bool isCrateMover9001 = false)
     {
         foreach (var procedure in rearrangementProcedure)
         {
             // move x from y to z
-            var crateAmount = procedure[0];
-            var from = procedure[1] - 1;
-            var to = procedure[2] - 1;
+            var (crateAmount, from, to) = (procedure[0], procedure[1] - 1, procedure[2] - 1);
             PrintState(crateAmount, from, to, stacks, true);
 
-            var movingCrates = stacks[from].Take(crateAmount).Reverse().ToList();
+            var movingCrates = isCrateMover9001
+                ? stacks[from].Take(crateAmount).ToList()
+                : stacks[from].Take(crateAmount).Reverse().ToList();
+
             stacks[from].RemoveRange(0, crateAmount);
             stacks[to].InsertRange(0, movingCrates);
 
@@ -50,7 +64,8 @@ public class Day5 : Day
         return (stacks, rearrangementProcedure);
     }
 
-    private static void PrintState(int crateAmount, int from, int to, IReadOnlyList<List<char>> stacks, bool initial)
+    private static void PrintState(int crateAmount, int from, int to,
+        IReadOnlyList<List<char>> stacks, bool initial)
     {
         var movedCrates = initial
             ? string.Join(" ", stacks[from].GetRange(0, crateAmount))
@@ -65,25 +80,22 @@ public class Day5 : Day
         {
             var fromIndexExists = i < stacks[from].Count;
             var toIndexExists = i < stacks[to].Count;
-            sb.AppendLine($" {(fromIndexExists ? stacks[from][i] : " ")} ---- {(toIndexExists ? stacks[to][i] : " ")}  ");
+            sb.AppendLine(
+                $" {(fromIndexExists ? stacks[from][i] : " ")} ---- {(toIndexExists ? stacks[to][i] : " ")}  ");
         }
 
         Console.WriteLine(sb.ToString());
     }
 
-    private IEnumerable<int[]> GetRearrangementProcedure(string instructionsString)
+    private static IEnumerable<int[]> GetRearrangementProcedure(string instructionsString)
     {
-        var instructions = instructionsString.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(instruction =>
-            instruction.Replace("move ", "").Replace(" from ", " ").Replace(" to ", " ")
-                .Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray()
-        );
+        var instructions = instructionsString.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            .Select(instruction =>
+                instruction.Replace("move ", "").Replace(" from ", " ").Replace(" to ", " ")
+                    .Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray()
+            );
         return instructions;
 
-    }
-
-    protected override async Task<string> ExecuteSecondAsync()
-    {
-        throw new NotImplementedException();
     }
 
     private static List<char>[] GetStartingStacks(string startingStackString)
