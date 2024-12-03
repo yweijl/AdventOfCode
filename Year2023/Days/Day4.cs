@@ -4,14 +4,13 @@ namespace Year2023.Days;
 
 public class Day4 : Day
 {
-    public Day4(bool executeFirst, bool executeSecond, AdventClient adventClient) : base(executeFirst, executeSecond,
-        adventClient)
+    public Day4(AdventClient adventClient) : base(adventClient)
     {
     }
 
     protected override int InputDay => 4;
 
-    protected override async Task<string> ExecuteFirstAsync()
+    public override async Task<string> ExecuteFirstAsync()
     {
         var pairs = await GetPairsAsync();
         var overlappingAssignments = pairs.Sum(_countOverlappingAssignments);
@@ -43,7 +42,7 @@ public class Day4 : Day
                     .ToArray());
     }
 
-    protected override async Task<string> ExecuteSecondAsync()
+    public override async Task<string> ExecuteSecondAsync()
     {
         var pairs = await GetPairsAsync();
         var overlappingSections = pairs.Sum(_countOverlappingSections);

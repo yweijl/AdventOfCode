@@ -5,20 +5,18 @@ namespace Year2023.Days;
 
 public class Day5 : Day
 {
-    public Day5(bool executeFirst, bool executeSecond, AdventClient adventClient) : base(
-        executeFirst, executeSecond,
-        adventClient)
+    public Day5(IAdventClient adventClient) : base(adventClient)
     {
     }
 
     protected override int InputDay => 5;
 
-    protected override Task<string> ExecuteFirstAsync()
+    public override Task<string> ExecuteFirstAsync()
     {
         return ExecuteCraneMoverAsync();
     }
 
-    protected override Task<string> ExecuteSecondAsync()
+    public override Task<string> ExecuteSecondAsync()
     {
         return ExecuteCraneMoverAsync(true);
     }

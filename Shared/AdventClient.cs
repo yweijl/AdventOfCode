@@ -1,20 +1,34 @@
 ﻿using System.Net;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 
 namespace Shared;
 
-public class AdventClient : IDisposable
+public class AdventClient : IAdventClient, IDisposable
 {
+    private readonly int year;
+
+    public AdventClient(int year)
+    {
+        this.year = year;
+    }
+
     public void Dispose()
     {
         GC.SuppressFinalize(this);
     }
 
-    public static async Task<string> GetInputAsync(int day)
+    public async Task<string> GetInputAsync(int day)
     {
-        var endpoint = new Uri($"https://adventofcode.com/2022/day/{day}/input", UriKind.Absolute);
+        var directory = Path.Combine(GetSolutionDirectory(), $"Inputs");
+        Directory.CreateDirectory(directory);
+        var input = Path.Combine(directory, $"Day-{day}");
+        if (File.Exists(input))
+        {
+            return File.ReadAllText(input);
+        }
 
-        string? input = null;
+        var endpoint = new Uri($"https://adventofcode.com/{year}/day/{day}/input", UriKind.Absolute);
 
         using var handler = new HttpClientHandler();
         using var httpClient = new HttpClient(handler);
@@ -28,14 +42,14 @@ public class AdventClient : IDisposable
             var response = await httpClient.GetAsync(endpoint);
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
+
+            File.WriteAllText(input, responseBody);
             return responseBody;
         }
         catch (HttpRequestException ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            throw new Exception($"Error fetching input for day {day}: {ex.Message}");
         }
-
-        return input!;
     }
 
     private static string GetSessionCookieValue()
@@ -47,5 +61,11 @@ public class AdventClient : IDisposable
 
         // Session Cookie stored in UserSecrets
         return configuration["SessionCookie"]!;
+    }
+
+    private static string GetSolutionDirectory()
+    {
+        var exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        return Directory.GetParent(exePath!)!.Parent!.Parent!.FullName;
     }
 }

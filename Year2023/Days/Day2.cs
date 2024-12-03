@@ -6,11 +6,11 @@ public class Day2 : Day
 {
     protected override int InputDay => 2;
 
-    public Day2(bool executeFirst, bool executeSecond, AdventClient client) : base(executeFirst, executeSecond, client)
+    public Day2(IAdventClient client) : base(client)
     {
     }
 
-    protected override async Task<string> ExecuteFirstAsync()
+    public override async Task<string> ExecuteFirstAsync()
     {
         var matches = await GetStrategyGuideAsync();
         var result = matches.Sum(match => match.GetMatchPoints);
@@ -18,7 +18,7 @@ public class Day2 : Day
     }
 
 
-    protected override async Task<string> ExecuteSecondAsync()
+    public override async Task<string> ExecuteSecondAsync()
     {
         var matches = (await GetStrategyGuideAsync()).ToList();
         matches.ForEach(x => x.UpdateMyGesture());

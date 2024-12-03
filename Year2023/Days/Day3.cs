@@ -6,12 +6,11 @@ public class Day3 : Day
 {
     protected override int InputDay => 3;
 
-    public Day3(bool executeFirst, bool executeSecond, AdventClient adventClient) : base(executeFirst, executeSecond,
-        adventClient)
+    public Day3(IAdventClient adventClient) : base(adventClient)
     {
     }
 
-    protected override async Task<string> ExecuteFirstAsync()
+    public override async Task<string> ExecuteFirstAsync()
     {
         var rucksackItems = await GetInputAsync();
         var priority = rucksackItems.Split('\n', StringSplitOptions.RemoveEmptyEntries)
@@ -26,7 +25,7 @@ public class Day3 : Day
         return priority.ToString();
     }
     
-    protected override async Task<string> ExecuteSecondAsync()
+    public override async Task<string> ExecuteSecondAsync()
     {
         var rucksackItems = await GetInputAsync();
         var elfGroups = rucksackItems.Split('\n', StringSplitOptions.RemoveEmptyEntries).Chunk(3);

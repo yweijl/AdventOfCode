@@ -6,16 +6,16 @@ public class Day1 : Day
 {
     protected override int InputDay => 1;
 
-    public Day1(bool executeFirst, bool executeSecond, AdventClient adventClient) : base(executeFirst, executeSecond, adventClient)
+    public Day1(IAdventClient adventClient) : base(adventClient)
     {
     }
 
-    protected override async Task<string> ExecuteFirstAsync()
+    public override async Task<string> ExecuteFirstAsync()
     {
         return (await GetCaloriesPerBackAsync()).Max().ToString();
     }
 
-    protected override async Task<string> ExecuteSecondAsync()
+    public override async Task<string> ExecuteSecondAsync()
     {
         var backpacks = await GetCaloriesPerBackAsync();
         return backpacks.OrderDescending().Take(3).Sum().ToString();
