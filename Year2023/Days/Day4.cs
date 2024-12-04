@@ -8,7 +8,7 @@ public class Day4 : Day
     {
     }
 
-    protected override int InputDay => 4;
+    protected override int DayInput => 4;
 
     public override async Task<string> ExecuteFirstAsync()
     {

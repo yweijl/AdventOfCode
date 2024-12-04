@@ -4,7 +4,7 @@ namespace Year2023.Days;
 
 public class Day3 : Day
 {
-    protected override int InputDay => 3;
+    protected override int DayInput => 3;
 
     public Day3(IAdventClient adventClient) : base(adventClient)
     {

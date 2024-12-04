@@ -20,7 +20,7 @@ public class AdventClient : IAdventClient, IDisposable
 
     public async Task<string> GetInputAsync(int day)
     {
-        var directory = Path.Combine(GetSolutionDirectory(), $"Inputs");
+        var directory = Path.Combine(GetSolutionDirectory(), $"Inputs", $"{year}");
         Directory.CreateDirectory(directory);
         var input = Path.Combine(directory, $"Day-{day}");
         if (File.Exists(input))
@@ -63,7 +63,7 @@ public class AdventClient : IAdventClient, IDisposable
         return configuration["SessionCookie"]!;
     }
 
-    private static string GetSolutionDirectory()
+    private string GetSolutionDirectory()
     {
         var exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         return Directory.GetParent(exePath!)!.Parent!.Parent!.FullName;

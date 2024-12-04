@@ -9,7 +9,7 @@ public class Day5 : Day
     {
     }
 
-    protected override int InputDay => 5;
+    protected override int DayInput => 5;
 
     public override Task<string> ExecuteFirstAsync()
     {

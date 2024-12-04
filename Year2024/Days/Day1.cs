@@ -4,9 +4,9 @@ namespace Year2024.Days;
 
 public class Day1 : Day
 {
-    protected override int InputDay => 1;
+    protected override int DayInput => 1;
 
-    public Day1(IAdventClient adventClient) 
+    public Day1(IAdventClient adventClient)
         : base(adventClient)
     {
     }
@@ -38,7 +38,7 @@ public class Day1 : Day
 
     private async Task<(int[], int[])> GetLocationIdsAsync()
     {
-        var input = await this.GetInputAsync();
+        var input = await GetInputAsync();
         var firstList = new List<int>();
         var secondList = new List<int>();
 

@@ -3,7 +3,7 @@ namespace Shared;
 public abstract class Day
 {
     private IAdventClient AdventClient { get; }
-    protected abstract int InputDay { get; }
+    protected abstract int DayInput { get; }
 
     protected Day(IAdventClient adventClient)
     {
@@ -12,7 +12,7 @@ public abstract class Day
 
     protected Task<string> GetInputAsync()
     {
-        return AdventClient.GetInputAsync(InputDay);
+        return AdventClient.GetInputAsync(DayInput);
     }
 
     public abstract Task<string> ExecuteFirstAsync();
